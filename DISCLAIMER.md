@@ -1,6 +1,35 @@
 # Disclaimer and Limitation of Liability
 
+> [!CAUTION]
+> **The Software is retired and unmaintained as of version 2.0.0. Its monitoring behaviour is disabled and will not be re-enabled by the author. See [§0](#0-retirement-notice) below, and [Project status](README.md#project-status).**
+
 **Please read this document carefully before installing or using this script. By installing, copying, modifying, or using this software (the "Software"), you ("the user") acknowledge that you have read, understood, and agreed to the terms set out below. If you do not agree, do not install or use the Software.**
+
+---
+
+## 0. Retirement Notice
+
+### 0.1 The Software is retired
+
+As of version 2.0.0, the Software is **retired, deprecated, and unmaintained**. Its automated monitoring behaviour is disabled: on load it displays a notice and performs no further action against any DVSA page.
+
+The author has ceased development permanently. The author no longer holds a DVSA practical driving test booking and therefore no longer has access to the DVSA booking management service against which the Software operated. The author will not update, amend, fix, or otherwise maintain the Software, and makes no commitment to review, respond to, or merge anything filed against the project.
+
+### 0.2 Why the Software was retired
+
+Two developments, either sufficient on its own:
+
+**(a) DVSA rules on unofficial slot-scanning services.** From 12 May 2026, DVSA guidance states that candidates must not use unofficial services that scan the driving test booking service for appointments. DVSA's booking terms and conditions separately prohibit the use of robotic applications ("bots"), third-party applications or websites, data mining, and similar tools to search for available test slots. DVSA state that where bot activity is detected against a licence they may cancel the booking or restrict the account holder's online booking access. The Software automated checking of the booking service for earlier slots, which falls within the description of that prohibited activity.
+
+**(b) Removal of the test centre search.** From 9 June 2026, a car practical test may only be moved to one of the three test centres nearest to where the test is booked, or back to the centre originally booked. DVSA's change-test-centre journey correspondingly no longer presents the free-text search the Software's multi-centre flow depended on.
+
+### 0.3 Continued use is at your sole risk
+
+Nothing in this Notice grants permission to use the Software in breach of DVSA's terms and conditions, and §3.2(4) of this Disclaimer continues to prohibit such use. Any person who re-enables the Software's monitoring behaviour, in this repository or in any fork, does so entirely at their own risk and on their own responsibility, including the risk that DVSA cancels their driving test booking or restricts their access to the online booking service. The author accepts no liability for any such consequence. The limitations in §7 (Limitation of Liability) apply in full.
+
+### 0.4 Forks
+
+The Software remains available under the MIT licence and may be forked accordingly (see §4). The author does not endorse, support, or take responsibility for any fork, and specifically does not endorse forks that restore or continue automated scanning of the DVSA booking service. Any fork is the sole responsibility of whoever operates it.
 
 ---
 
@@ -285,6 +314,8 @@ The author may modify, update, or restructure the Software at any time without n
 
 The author may, at any time and without notice, archive the project, mark it unmaintained, withdraw it from public availability, or cease responding to issues and pull requests. Users have no claim against the author arising from such discontinuation. Users requiring continuity of service from a similar tool are responsible for finding alternatives.
 
+**This has now occurred.** The Software was retired at version 2.0.0 and its monitoring behaviour permanently disabled by the author. See [§0 (Retirement Notice)](#0-retirement-notice).
+
 ### 15.3 Changes to these Terms
 
 The author may modify the terms of this Disclaimer in future versions of the Software. Continued use of any updated version constitutes acceptance of the updated terms in their entirety. It is your responsibility to review the version of this Disclaimer included with the version of the Software you are using.
@@ -329,4 +360,4 @@ The author makes no commitment to respond to questions, requests for legal advic
 
 ---
 
-*Last updated: 17 May 2026*
+*Last updated: 3 August 2026*

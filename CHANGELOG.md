@@ -6,21 +6,41 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and thi
 
 ---
 
-## [Unreleased]
+## [2.0.0], 2026-08-03
+
+**Final release. The project is retired and unmaintained.**
+
+### Removed
+
+- **Monitoring is disabled.** A `DEPRECATED` constant near the top of the userscript gates `main()` ahead of every page handler. Nothing is clicked, submitted, scheduled, or reloaded on any DVSA page. The script renders a single dismissable notice explaining the retirement and returns.
+
+  The user-gesture listeners that primed the audio context and requested notification permission are also skipped while deprecated — a retired script has no alerts to play, and prompting for permission on a page it no longer acts on would be misleading.
+
+  Everything else is left intact. The handlers, settings panel, wizard, history, and self-test all remain in the source: the intent is that the code stays readable and forkable, not that it's gutted. Setting `DEPRECATED = false` restores the previous behaviour, with the caveats below.
+
+### Why
+
+Two developments, either sufficient on its own:
+
+- **12 May 2026 — unofficial slot-scanning services.** DVSA guidance states that candidates must not use unofficial services that scan the driving test booking service for appointments, and DVSA's booking terms and conditions prohibit bots, third-party applications, and similar tools for searching test slots. DVSA state they can cancel a booking or restrict online booking access where bot activity is detected against a licence. That consequence lands on the user's own test. Scanning is what this script did.
+
+- **9 June 2026 — 3 nearest test centres.** A car test can now only be moved to one of the 3 test centres nearest to where it is booked, or back to the originally booked centre. DVSA's change service shows the eligible centres directly, so the free-text postcode search the multi-centre flow (Flow 2) was built around is no longer offered. `requireSelector('#test-centres-input', …)` consequently fired a *"DVSA layout changed"* intervention and the flow stopped. Reported in [#2](https://github.com/alchemycharlie/dvsa-earlier-slot-watcher/issues/2) against v1.1.4.
+
+- **No maintainer.** The author has passed their driving test and no longer holds a DVSA booking. Access to the booking management service requires one, so there is no longer any way to develop, debug, or verify a change against the real site.
+
+The replacement markup on DVSA's change-test-centre page was **not** confirmed against a live page — the site sits behind bot protection and the journey requires an authenticated booking. The Flow 2 diagnosis is inferred from DVSA's published rule changes plus the selector named in the bug report. It made no difference to the outcome.
 
 ### Docs
 
-- **Documented the 2026 DVSA booking rule changes and the resulting breakage.** No code changes; this entry records the situation while the direction for the script itself is decided.
+- README restructured around the retirement: status notice at the top, a *Project status* section covering what "retired" means and what a fork would be taking on, a *2026 DVSA rule changes* section with GOV.UK sources, and reference markers on the install instructions. The technical documentation is left in place as a description of how the script worked.
+- DISCLAIMER gains **§0 Retirement Notice** (retirement, reasons, continued use at the user's sole risk, forks) and a pointer from §15.2. §3.2(4) already prohibited use in breach of DVSA's terms and is unchanged.
+- CONTRIBUTING section of the README now states plainly that issues and pull requests will not be reviewed or merged.
 
-  **12 May 2026** — DVSA guidance states that candidates must not use unofficial services that scan the driving test booking service for appointments, and DVSA's booking terms and conditions prohibit bots, third-party applications and similar tools for searching test slots. DVSA state they can cancel a booking or restrict online booking access where bot activity is detected against a licence. This is the activity the script automates.
+### Notes for anyone forking
 
-  **9 June 2026** — a car test can only be moved to one of the 3 nearest test centres to where it is booked, or back to the originally booked centre. DVSA's change service now shows the eligible centres directly.
+Fork freely — MIT, no permission needed. Two things to weigh: Flow 2 is broken against the current site regardless of the `DEPRECATED` flag, and restoring monitoring means running a slot scanner against a service whose operator now expressly forbids it, with the risk falling on whoever's licence it runs under. The author does not endorse forks that continue automated scanning, and asks that forks drop the original name.
 
-  **Consequence for the script:** the multi-centre search flow (Flow 2) drives a free-text postcode box (`#test-centres-input` / `#test-centres-submit`) on `page-test-centre-search`. With the destination set now fixed at 3 centres, that search box is no longer needed and reportedly no longer present, so `requireSelector` fires a *"DVSA layout changed"* intervention and the flow stops. Reported in [#2](https://github.com/alchemycharlie/dvsa-earlier-slot-watcher/issues/2) against v1.1.4.
-
-  The exact replacement markup has **not** been confirmed against a live page — the DVSA site sits behind bot protection and the change-test-centre journey requires an authenticated booking. The diagnosis above is inferred from DVSA's published rule changes plus the selector named in the bug report.
-
-  README gains a *2026 DVSA rule changes* section with sources, a prominent notice at the top, and a troubleshooting entry for the specific intervention.
+[2.0.0]: https://github.com/alchemycharlie/dvsa-earlier-slot-watcher/releases/tag/v2.0.0
 
 ---
 

@@ -1,5 +1,8 @@
 # Security Policy
 
+> [!CAUTION]
+> **The project is retired as of v2.0.0 and is no longer maintained.** No security fixes will be issued. As of v2.0.0 the script performs no automated action against any DVSA page, which removes most of its former attack surface, but nothing here should be read as a commitment to assess or fix anything. See [DISCLAIMER §0](DISCLAIMER.md#0-retirement-notice).
+
 This is a personal open-source userscript. **The maintainer makes no commitment to ongoing security maintenance, no commitment to reviewing reports, and no commitment to releasing fixes.** The project may be unmaintained at any given time, without notice. See [DISCLAIMER §15 (Discontinuation)](DISCLAIMER.md#15-modifications-discontinuation-and-changes-to-these-terms).
 
 If you'd like to report a security issue responsibly anyway, this document covers the channel and what's in scope.

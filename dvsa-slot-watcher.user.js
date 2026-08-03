@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         DVSA Earlier Slot Watcher
+// @name         DVSA Earlier Slot Watcher (RETIRED)
 // @namespace    https://github.com/alchemycharlie/dvsa-earlier-slot-watcher
-// @version      1.1.4
-// @description  For UK learner drivers with an existing DVSA practical driving test booking. Watches the "Change your test" calendar for an earlier cancellation slot at your chosen test centre, alerts you the moment one appears in your target date window, and can optionally auto-reschedule up to the final confirmation page. Does NOT book new tests, you must already have a booking.
+// @version      2.0.0
+// @description  RETIRED, NO LONGER MONITORS. This script is deprecated and unmaintained. DVSA rules from 12 May 2026 prohibit using unofficial services that scan the driving test booking service for appointments, and DVSA can cancel your booking or restrict your online booking access if bot activity is detected against your licence. The automated flow is disabled: on load the script shows a notice and stops. Source stays available under MIT for anyone who wants to fork it.
 // @author       alchemycharlie
 // @homepageURL  https://github.com/alchemycharlie/dvsa-earlier-slot-watcher
 // @supportURL   https://github.com/alchemycharlie/dvsa-earlier-slot-watcher/issues
@@ -23,7 +23,39 @@
     // Script version. Kept in sync with the @version line in the userscript
     // header at the top of this file. Surfaced in the About pane of the
     // settings panel and in the self-test diagnostic output for bug reports.
-    const SCRIPT_VERSION = '1.1.4';
+    const SCRIPT_VERSION = '2.0.0';
+
+    // =========================================================================
+    //  RETIRED
+    // =========================================================================
+    // This project is deprecated and no longer maintained by its author.
+    //
+    // Two things happened:
+    //
+    //   1. From 12 May 2026, DVSA's rules state that candidates must not use
+    //      unofficial services that scan the driving test booking service for
+    //      appointments. DVSA's booking terms and conditions separately
+    //      prohibit bots and third-party tools for searching test slots, and
+    //      DVSA state they can cancel a booking or restrict online booking
+    //      access where bot activity is detected against a licence. That
+    //      consequence lands on the user's own test. Scanning is exactly what
+    //      this script did.
+    //
+    //   2. From 9 June 2026, a car test can only be moved to one of the 3
+    //      nearest test centres (or back to the originally booked one), so
+    //      DVSA's change-test-centre page no longer offers the free-text
+    //      postcode search the multi-centre flow was built around. That flow
+    //      was already broken as a result (issue #2).
+    //
+    // With DEPRECATED = true, main() renders a notice and returns before any
+    // page handler runs. Nothing is clicked, submitted, scheduled or reloaded.
+    //
+    // The rest of the source is left intact and MIT-licensed. If you fork this
+    // and intend to run it, setting DEPRECATED = false restores the original
+    // behaviour — but understand that you would be running a slot scanner
+    // against a service whose operator now expressly forbids it, and the risk
+    // (cancelled booking, loss of online access) is yours.
+    const DEPRECATED = true;
 
     // Tab-focus tracking. Browsers throttle setTimeout (and other timers) when
     // a tab is in the background, which can stretch the script's refresh
@@ -1324,10 +1356,16 @@
     // via the unified Pointer Events API; touchstart is a fallback for older
     // browsers that don't dispatch pointerdown. {once:true} self-removes after
     // priming so we don't keep listeners alive once the gesture has happened.
-    document.addEventListener('click',       primeUserGestureFeatures, { once: true, capture: true });
-    document.addEventListener('keydown',     primeUserGestureFeatures, { once: true, capture: true });
-    document.addEventListener('pointerdown', primeUserGestureFeatures, { once: true, capture: true });
-    document.addEventListener('touchstart',  primeUserGestureFeatures, { once: true, capture: true, passive: true });
+    //
+    // Skipped entirely while DEPRECATED: a retired script has no alerts to
+    // play, and prompting for notification permission on a page it no longer
+    // acts on would be both pointless and misleading.
+    if (!DEPRECATED) {
+        document.addEventListener('click',       primeUserGestureFeatures, { once: true, capture: true });
+        document.addEventListener('keydown',     primeUserGestureFeatures, { once: true, capture: true });
+        document.addEventListener('pointerdown', primeUserGestureFeatures, { once: true, capture: true });
+        document.addEventListener('touchstart',  primeUserGestureFeatures, { once: true, capture: true, passive: true });
+    }
 
     // =========================================================================
     //  SETTINGS PANEL
@@ -5842,7 +5880,47 @@
         });
     }
 
+    // Render the retirement notice. This is the script's entire behaviour while
+    // DEPRECATED is true: one dismissable banner, then nothing. Deliberately
+    // built from scratch rather than routed through fireInterventionAlert —
+    // interventions set STATUS, flash the tab title and fire OS notification
+    // bursts, all of which imply "resolve this and monitoring resumes". It
+    // doesn't. Dismissal is per page load; there's no persistence to add when
+    // the script does nothing else.
+    function showRetirementNotice() {
+        if (document.getElementById('dvsa-retired-banner')) return;
+        injectWatcherCSS();
+
+        const banner = document.createElement('div');
+        banner.id = 'dvsa-retired-banner';
+        banner.className = 'dvsa-banner dvsa-banner-small dvsa-banner-dismissable';
+        banner.style.background = '#505a5f';
+        banner.textContent =
+            'DVSA Earlier Slot Watcher has been retired and no longer monitors for slots. ' +
+            'Since 12 May 2026 DVSA’s rules do not allow unofficial services that scan the ' +
+            'booking service for appointments. Please uninstall it from Tampermonkey. Click to dismiss.';
+
+        const closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
+        closeBtn.title = 'Dismiss';
+        closeBtn.textContent = '×';
+        closeBtn.className = 'dvsa-banner-close dvsa-banner-close-small';
+        banner.appendChild(closeBtn);
+
+        banner.addEventListener('click', () => banner.remove());
+        document.body.prepend(banner);
+    }
+
     async function main() {
+        // Retirement gate. Comes before everything — including the queue-page
+        // and config checks — so that no stored config is read, no timer is
+        // scheduled and no element on a DVSA page is ever touched.
+        if (DEPRECATED) {
+            log(`v${SCRIPT_VERSION}: retired. Monitoring is disabled and will not start. See https://github.com/alchemycharlie/dvsa-earlier-slot-watcher for why.`);
+            showRetirementNotice();
+            return;
+        }
+
         // Runs first: brings legacy dvsaWatcher.* storage keys forward to the
         // unified dvsa-watcher-* prefix. Idempotent, safe to call on every load.
         migrateLegacyStorageKeys();

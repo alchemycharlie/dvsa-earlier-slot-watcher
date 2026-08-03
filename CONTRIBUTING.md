@@ -1,5 +1,10 @@
 # Contributing
 
+> [!CAUTION]
+> **The project is retired as of v2.0.0 and closed to further work by the author.** Issues and pull requests will not be reviewed, responded to, or merged. Please don't wait on a reply. If you want to take the code further, fork it — see [Project status](README.md#project-status) and [DISCLAIMER §0](DISCLAIMER.md#0-retirement-notice).
+>
+> The rest of this file is kept as a record of how the project was set up and what its conventions were, for anyone reading or forking the source.
+
 This is a personal project I built for myself to catch an earlier DVSA test cancellation, then shared publicly in case it helps anyone else in the same situation. It is not a team effort, a maintained product, or a community-led project.
 
 **No commitment is made to ongoing maintenance, code review, response to issues, or merging of pull requests.** Any of those things may happen at the maintainer's discretion and availability, or may not. The repository may be archived or marked unmaintained at any time without notice. See [DISCLAIMER §15 (Discontinuation)](DISCLAIMER.md#15-modifications-discontinuation-and-changes-to-these-terms).

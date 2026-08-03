@@ -1,8 +1,8 @@
-# DVSA Earlier Slot Watcher
+# DVSA Earlier Slot Watcher — retired
 
-A Tampermonkey userscript for UK learner drivers with an **existing DVSA practical driving test booking**. Watches the "Change your test" page for earlier cancellation slots at your test centre, alerts when one appears in your accepted date window, and can optionally auto-reschedule up to DVSA's final confirmation step.
+A Tampermonkey userscript for UK learner drivers with an **existing DVSA practical driving test booking**. It watched the "Change your test" page for earlier cancellation slots at your test centre, alerted when one appeared in your accepted date window, and could optionally auto-reschedule up to DVSA's final confirmation step.
 
-**Does not book new tests**, you must already have a confirmed booking.
+**This project is retired and unmaintained. As of v2.0.0 the script no longer monitors for slots.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/github/v/tag/alchemycharlie/dvsa-earlier-slot-watcher?label=version&color=brightgreen)](CHANGELOG.md)
@@ -15,21 +15,59 @@ A Tampermonkey userscript for UK learner drivers with an **existing DVSA practic
 </p>
 
 > [!CAUTION]
-> **DVSA changed the booking rules in 2026. Read this before installing or continuing to use the script.** See [2026 DVSA rule changes](#2026-dvsa-rule-changes) for detail and sources.
+> ## This project is retired
 >
-> - **From 12 May 2026**, DVSA's rules state that you **must not use unofficial services that scan the driving test booking service for appointments**. That is what this script does. DVSA say that where they detect bot activity linked to your licence they can **cancel your booking or restrict your online booking access**.
-> - **From 9 June 2026**, you can only move a car test to one of the **3 nearest test centres** (plus the centre you originally booked). DVSA appear to have replaced the free-text test centre search with a fixed list of eligible centres, which is why the script's multi-centre search flow currently breaks with a *"DVSA layout changed"* intervention ([#2](https://github.com/alchemycharlie/dvsa-earlier-slot-watcher/issues/2)).
+> **v2.0.0 does not monitor for slots.** It shows a notice and stops. The author has passed their driving test, no longer has access to the DVSA booking management service, and **will not be updating or amending this project again**.
 >
-> The script is **not currently working** for the multi-centre search flow, and the activity it automates is no longer permitted by DVSA. Use of it is at your own risk, against your own booking.
+> Two reasons, either of which would be enough on its own:
+>
+> - **From 12 May 2026**, DVSA's rules state that you **must not use unofficial services that scan the driving test booking service for appointments**. That is what this script did. DVSA say that where bot activity is detected against your licence they can **cancel your booking or restrict your online booking access**.
+> - **From 9 June 2026**, a car test can only move to one of the **3 nearest test centres** (or back to the one you originally booked). DVSA no longer offer the free-text test centre search the script was built around, which is what broke it ([#2](https://github.com/alchemycharlie/dvsa-earlier-slot-watcher/issues/2)).
+>
+> **If you have it installed, please remove it** from your Tampermonkey dashboard.
+>
+> The repository stays up and the source stays MIT-licensed. See [Project status](#project-status) if you're thinking about forking it.
 
 > [!WARNING]
 > Unofficial community tool. No affiliation with DVSA, gov.uk, or the UK Government. No warranty, no liability for missed slots or account issues. By installing you accept the terms in **[DISCLAIMER.md](DISCLAIMER.md)**. Full legal and permitted-use details: [Terms of use](#terms-of-use).
 
-**Jump to:** [2026 rule changes](#2026-dvsa-rule-changes) · [Install](#install) · [Troubleshooting](#troubleshooting) · [FAQ](#faq) · [Privacy](#privacy) · [Auto-book safety](#auto-book-safety) · [Terms of use](#terms-of-use)
+**Jump to:** [Project status](#project-status) · [2026 rule changes](#2026-dvsa-rule-changes) · [Install](#install) · [Troubleshooting](#troubleshooting) · [FAQ](#faq) · [Privacy](#privacy) · [Auto-book safety](#auto-book-safety) · [Terms of use](#terms-of-use)
+
+---
+
+## Project status
+
+**Retired as of v2.0.0. Unmaintained. No further updates from the author.**
+
+This was a hobby project, written by one person for their own driving test and shared in case it helped anyone else. That test has been passed. The author no longer has a DVSA booking to test against — access to the booking management service requires one, so there is now no way to develop, debug or verify a change against the real site even in principle.
+
+The [2026 rule changes](#2026-dvsa-rule-changes) settled the question anyway: the activity the script automated is no longer permitted, and the page it drove no longer exists in the form it needed.
+
+### What "retired" means here
+
+- **The code still runs, and deliberately does nothing.** `DEPRECATED = true` near the top of the userscript gates `main()` before any page handler. Nothing is clicked, submitted, scheduled or reloaded; the script renders one dismissable notice and returns.
+- **The repository is not going anywhere.** Source, history, docs and issues stay public and MIT-licensed.
+- **Nothing further will be reviewed or merged.** Issues and pull requests may go unread. Please don't wait on a response.
+
+### If you want to take it further
+
+Fork it. The MIT licence already grants you that, and no permission is needed.
+
+Be aware of what you'd be taking on:
+
+- Flipping `DEPRECATED` back to `false` restores the original behaviour, but the multi-centre search flow is broken against the current DVSA site regardless — it depends on a search box DVSA removed.
+- More importantly, you would be running a slot scanner against a service whose operator now **expressly forbids** it, with the consequences (cancelled booking, restricted online access) landing on whoever's licence it runs under. Read [2026 DVSA rule changes](#2026-dvsa-rule-changes) first, and make your own decision with your eyes open.
+
+The author does not endorse forks that continue automated scanning of the DVSA booking service, and asks that any fork drops the original name and makes clear it is unaffiliated.
+
+The documentation below is left intact as a description of how the script worked, for anyone reading the source.
 
 ---
 
 ## What it does
+
+> [!NOTE]
+> Past tense from here on: this section describes what the script did before it was retired. As of v2.0.0 it does none of it.
 
 For users with an existing DVSA test booking who want to reschedule earlier:
 
@@ -69,6 +107,9 @@ The practical consequence for this script: the "Change test centre" journey no l
 
 ## Quick start
 
+> [!IMPORTANT]
+> **Don't.** The script is [retired](#project-status) and installing it now gets you a notice and nothing else. These instructions are kept for reference only.
+
 The 60-second version. Full walkthrough in [Install](#install).
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) for your browser.
@@ -82,6 +123,9 @@ Press `S` for settings, `H` for history, `P` to pause.
 ---
 
 ## Install
+
+> [!IMPORTANT]
+> Kept for reference. The script is [retired](#project-status) and no longer monitors for slots — there is nothing to gain by installing it. If it is already installed, remove it from your Tampermonkey dashboard.
 
 ### 1. Install Tampermonkey
 
@@ -281,9 +325,9 @@ The auto-pause persists across reloads. Unpause manually (click the floating pla
 
 **Symptom:** the intervention banner reads *"A page element the script needs is missing"* and names `#test-centres-input, postcode input on test centre search`.
 
-**Known issue, not fixable by reinstalling.** Following the [9 June 2026 rule change](#9-june-2026--3-nearest-test-centres), a car test can only move to one of the 3 nearest centres, so DVSA no longer need a free-text postcode search on the change-test-centre page — they show the eligible centres directly. The script's multi-centre search flow (Flow 2) was built around that search box and has no path forward without it.
+**Won't be fixed — this is what retired the project.** Following the [9 June 2026 rule change](#9-june-2026--3-nearest-test-centres), a car test can only move to one of the 3 nearest centres, so DVSA no longer need a free-text postcode search on the change-test-centre page — they show the eligible centres directly. The multi-centre search flow (Flow 2) was built around that search box and has no path forward without it.
 
-There is no workaround in the current version, and note that the [12 May 2026 rule](#12-may-2026--unofficial-slot-scanning-services) means automated scanning of the booking service is no longer permitted at all. Tracked in [#2](https://github.com/alchemycharlie/dvsa-earlier-slot-watcher/issues/2).
+Reinstalling or updating won't help. On v2.0.0 you won't see this intervention at all, because the script no longer runs its automated flow — see [Project status](#project-status). Reported in [#2](https://github.com/alchemycharlie/dvsa-earlier-slot-watcher/issues/2).
 
 ### "Layout broken" intervention
 
@@ -470,21 +514,19 @@ By completing installation and saving any configuration, you confirm that you ha
 
 ## Contributing
 
-This is a personal project shared as-is. Issue and PR templates exist in [.github/ISSUE_TEMPLATE](.github/ISSUE_TEMPLATE/) if you'd like to file something, but there's no commitment that anything filed will be reviewed, responded to, or merged. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full picture.
+**The project is [retired](#project-status) and closed to further work by the author.** Issues and pull requests are no longer being reviewed, responded to, or merged — including bug reports about DVSA site changes, which is the category this project ended on. Nothing filed here will be picked up.
 
-If you do file a bug report, useful details include:
+If you want to carry it forward, fork it. The MIT licence grants you that without asking, and [Project status](#project-status) covers what you'd be taking on.
 
-- Tampermonkey version and browser
-- Console log snippet (`[DVSA Earlier Slot Watcher]` lines)
-- The DVSA page state when it happened
+Genuine security issues in the code itself: [SECURITY.md](SECURITY.md) — don't file those as public issues. Note that the same no-commitment caveat applies.
 
-For security issues, see [SECURITY.md](SECURITY.md) — don't file those as public issues.
+The historical contribution guidance is preserved in [CONTRIBUTING.md](CONTRIBUTING.md) for reference.
 
 ---
 
 ## Support
 
-Free, open source, and ad-free. If it's helped you find an earlier test date, a coffee is appreciated.
+Free, open source, and ad-free — and now retired, so there is no support to give. If it helped you find an earlier test date while it was running, a coffee is appreciated.
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-%E2%98%95-yellow.svg)](https://buymeacoffee.com/charlie.martina)
 
