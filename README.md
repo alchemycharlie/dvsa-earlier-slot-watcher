@@ -14,10 +14,18 @@ A Tampermonkey userscript for UK learner drivers with an **existing DVSA practic
   <img src="docs/screenshots/hero.png" alt="The DVSA Earlier Slot Watcher running on a DVSA booking page, showing the floating status pill and settings gear in the bottom-right corner" width="900">
 </p>
 
+> [!CAUTION]
+> **DVSA changed the booking rules in 2026. Read this before installing or continuing to use the script.** See [2026 DVSA rule changes](#2026-dvsa-rule-changes) for detail and sources.
+>
+> - **From 12 May 2026**, DVSA's rules state that you **must not use unofficial services that scan the driving test booking service for appointments**. That is what this script does. DVSA say that where they detect bot activity linked to your licence they can **cancel your booking or restrict your online booking access**.
+> - **From 9 June 2026**, you can only move a car test to one of the **3 nearest test centres** (plus the centre you originally booked). DVSA appear to have replaced the free-text test centre search with a fixed list of eligible centres, which is why the script's multi-centre search flow currently breaks with a *"DVSA layout changed"* intervention ([#2](https://github.com/alchemycharlie/dvsa-earlier-slot-watcher/issues/2)).
+>
+> The script is **not currently working** for the multi-centre search flow, and the activity it automates is no longer permitted by DVSA. Use of it is at your own risk, against your own booking.
+
 > [!WARNING]
 > Unofficial community tool. No affiliation with DVSA, gov.uk, or the UK Government. No warranty, no liability for missed slots or account issues. By installing you accept the terms in **[DISCLAIMER.md](DISCLAIMER.md)**. Full legal and permitted-use details: [Terms of use](#terms-of-use).
 
-**Jump to:** [Install](#install) · [Troubleshooting](#troubleshooting) · [FAQ](#faq) · [Privacy](#privacy) · [Auto-book safety](#auto-book-safety) · [Terms of use](#terms-of-use)
+**Jump to:** [2026 rule changes](#2026-dvsa-rule-changes) · [Install](#install) · [Troubleshooting](#troubleshooting) · [FAQ](#faq) · [Privacy](#privacy) · [Auto-book safety](#auto-book-safety) · [Terms of use](#terms-of-use)
 
 ---
 
@@ -29,6 +37,33 @@ For users with an existing DVSA test booking who want to reschedule earlier:
 - **Filters** by date window, weekends, and your instructor's unavailable dates.
 - **Alerts** four ways at once: red banner, browser notification, audio chime, tab-title flash.
 - **Auto-books (opt-in)** through to DVSA's "Confirm changes" page; the final commit stays manual.
+
+---
+
+## 2026 DVSA rule changes
+
+DVSA changed the car practical test booking rules during 2026. Two of those changes bear directly on this script.
+
+### 12 May 2026 — unofficial slot-scanning services
+
+DVSA's guidance states that you cannot use *"unofficial services that scan the driving test booking service for appointments"*, including driving test cancellation finder websites and apps. DVSA's booking terms and conditions separately prohibit the use of bots, third-party applications or websites, data mining and similar extraction tools to search for available test slots.
+
+DVSA's stated enforcement: where bot activity is detected against a licence, they can **cancel the booking** or **restrict online booking access**, leaving the candidate to manage their test by phone.
+
+This script automates checking the booking service for earlier slots. Regardless of how carefully it paces itself, that is the activity the rule describes.
+
+### 9 June 2026 — 3 nearest test centres
+
+A car test can now only be moved to one of the **3 test centres nearest to where the test is currently booked** (by driving distance, avoiding motorways), or back to the centre it was originally booked at. DVSA state that the change service *"shows all your available options"*.
+
+The practical consequence for this script: the "Change test centre" journey no longer needs, and appears no longer to offer, the free-text postcode search box the script drives. See [Test centre search box has gone](#test-centre-search-box-has-gone-dvsa-layout-changed-on-page-test-centre-search).
+
+### Sources
+
+- [Changes to driving test booking rules in 2026](https://www.gov.uk/guidance/changes-to-driving-test-booking-rules-in-2026) — GOV.UK
+- [Check which driving test centres you can move your test to](https://www.gov.uk/government/publications/check-which-driving-test-centres-you-can-move-your-test-to/check-which-driving-test-centres-you-can-move-your-test-to) — GOV.UK
+- [End of the road for unofficial driving test booking services](https://www.gov.uk/government/news/end-of-the-road-for-unofficial-driving-test-booking-services) — GOV.UK
+- [Unofficial driving test booking apps and scams](https://readytopass.campaign.gov.uk/unofficial-driving-test-booking-apps-and-scams/) — DVSA "Ready to Pass?" campaign
 
 ---
 
@@ -241,6 +276,14 @@ The auto-pause persists across reloads. Unpause manually (click the floating pla
 <p align="center">
   <img src="docs/screenshots/change-limit-reached.png" alt="The DVSA booking summary when the change limit has been reached, with the script's red intervention banner explaining the state and pointing the user at DVSA's contact number" width="720">
 </p>
+
+### Test centre search box has gone ("DVSA layout changed" on page-test-centre-search)
+
+**Symptom:** the intervention banner reads *"A page element the script needs is missing"* and names `#test-centres-input, postcode input on test centre search`.
+
+**Known issue, not fixable by reinstalling.** Following the [9 June 2026 rule change](#9-june-2026--3-nearest-test-centres), a car test can only move to one of the 3 nearest centres, so DVSA no longer need a free-text postcode search on the change-test-centre page — they show the eligible centres directly. The script's multi-centre search flow (Flow 2) was built around that search box and has no path forward without it.
+
+There is no workaround in the current version, and note that the [12 May 2026 rule](#12-may-2026--unofficial-slot-scanning-services) means automated scanning of the booking service is no longer permitted at all. Tracked in [#2](https://github.com/alchemycharlie/dvsa-earlier-slot-watcher/issues/2).
 
 ### "Layout broken" intervention
 
